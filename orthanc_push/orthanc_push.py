@@ -161,6 +161,27 @@ class Orthanc_push(ChrisApp):
                             optional     = True,
                             help         = 'Orthanc server url',
                             default      = 'orthanc')
+                            
+        self.add_argument(  '--aetName','-n',
+                            dest         = 'aetName',
+                            type         = str,
+                            optional     = True,
+                            help         = 'Orthanc server url',
+                            default      = 'ORTHANCA')
+                            
+        self.add_argument(  '--aetIP','-i',
+                            dest         = 'aetIP',
+                            type         = str,
+                            optional     = True,
+                            help         = 'Orthanc server url',
+                            default      = '127.0.0.1')
+                            
+        self.add_argument(  '--aetPort','-a',
+                            dest         = 'aetPort',
+                            type         = str,
+                            optional     = True,
+                            help         = 'Orthanc server url',
+                            default      = '2000')
 
     def run(self, options):
         """
