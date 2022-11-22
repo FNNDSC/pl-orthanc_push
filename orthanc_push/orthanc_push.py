@@ -34,6 +34,10 @@ Gstr_synopsis = """
     SYNOPSIS
 
         docker run --rm fnndsc/pl-orthanc_push orthanc_push             \\
+            [-f|--inputFileFilter <inputFileFilter>]                    \\
+            [-o|--orthancUrl <orthancServerUrl>]                        \\
+            [-u|--username <orthancUserName>]                           \\
+            [-p|--password <orthancPassword>]                           \\
             [-h] [--help]                                               \\
             [--json]                                                    \\
             [--man]                                                     \\
@@ -55,9 +59,22 @@ Gstr_synopsis = """
 
     DESCRIPTION
 
-        `orthanc_push` ...
+        `orthanc_push` is an app to push/upload dicoms to an orthanc server
 
     ARGS
+    
+        [-f|--inputFileFilter <inputFileFilter>]
+        A glob pattern string, default is "**/*.dcm", representing the input
+        file pattern to analyze.
+        
+        [-o|--orthancUrl <orthancServerUrl>]
+        URL of the orthanc server.
+        
+        [-u|--username <orthancUserName>]
+        The username to login to the orthanc server.
+        
+        [-p|--password <orthancPassword>]
+        Specify the password to login to the orthanc server.        
 
         [-h] [--help]
         If specified, show help message and exit.
@@ -87,7 +104,7 @@ class Orthanc_push(ChrisApp):
     An app to push/upload dicoms to an orthanc server
     """
     PACKAGE                 = __package__
-    TITLE                   = 'A ChRIS plugin app'
+    TITLE                   = 'A ChRIS plugin app to push/upload dicoms to an orthanc server'
     CATEGORY                = ''
     TYPE                    = 'ds'
     ICON                    = ''   # url of an icon image
