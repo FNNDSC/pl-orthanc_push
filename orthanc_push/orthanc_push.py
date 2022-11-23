@@ -11,7 +11,7 @@
 from chrisapp.base import ChrisApp
 import os
 import glob
-from pyorthanc import Orthanc
+from pyorthanc import Orthanc, RemoteModality
 
 Gstr_title = r"""
             _   _                                          _     
@@ -162,26 +162,14 @@ class Orthanc_push(ChrisApp):
                             help         = 'Orthanc server url',
                             default      = 'orthanc')
                             
-        self.add_argument(  '--aetName','-n',
-                            dest         = 'aetName',
+        self.add_argument(  '--remoteModality','-m',
+                            dest         = 'remoteModality',
                             type         = str,
                             optional     = True,
-                            help         = 'Orthanc server url',
-                            default      = 'ORTHANCA')
+                            help         = 'Remote modality',
+                            default      = 'CHRISLOCAL')
                             
-        self.add_argument(  '--aetIP','-i',
-                            dest         = 'aetIP',
-                            type         = str,
-                            optional     = True,
-                            help         = 'Orthanc server url',
-                            default      = '127.0.0.1')
-                            
-        self.add_argument(  '--aetPort','-a',
-                            dest         = 'aetPort',
-                            type         = str,
-                            optional     = True,
-                            help         = 'Orthanc server url',
-                            default      = '2000')
+
 
     def run(self, options):
         """
@@ -201,11 +189,19 @@ class Orthanc_push(ChrisApp):
         orthanc = Orthanc(options.orthancUrl,username=options.username,password=options.password)
         dcm_str_glob = '%s/%s' % (options.inputdir,options.inputFileFilter)
         l_dcm_datapath = glob.glob(dcm_str_glob, recursive=True)
+        
+        modality = RemoteModality(orthanc,options.remoteModality) 
 
         for dcm_datapath in l_dcm_datapath:
             print(f"Pushing dicom: {dcm_datapath} to orthanc \n")
             with open(dcm_datapath, 'rb') as file:
-                orthanc.post_instances(file.read())
+                data = orthanc.post_instances(file.read())
+                resource_id = data['ID']
+                print(f'Pushing resource {resource_id} to {options.remoteModality} \n')
+                response = modality.store( {'Resources':[resource_id]})
+                print(f'Response : {response}')
+        
+       
 
     def show_man_page(self):
         """
