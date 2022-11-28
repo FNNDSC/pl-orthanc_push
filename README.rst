@@ -17,7 +17,8 @@ pl-orthanc_push
 Abstract
 --------
 
-An app to ...
+An app to push/upload dicoms to an orthanc server and to a remote modality
+(if specified)
 
 
 Description
@@ -34,6 +35,11 @@ Usage
 .. code::
 
     docker run --rm fnndsc/pl-orthanc_push orthanc_push
+        [-f|--inputFileFilter <inputFileFilter>]                    
+        [-o|--orthancUrl <orthancServerUrl>]                       
+        [-u|--username <orthancUserName>]                          
+        [-p|--password <orthancPassword>]                         
+        [-m|--remoteModality <remoteModality>]                     
         [-h|--help]
         [--json] [--man] [--meta]
         [--savejson <DIR>]
@@ -46,6 +52,22 @@ Arguments
 ~~~~~~~~~
 
 .. code::
+
+    [-f|--inputFileFilter <inputFileFilter>]
+    A glob pattern string, default is "**/*.dcm", representing the input
+    file pattern to analyze.
+        
+    [-o|--orthancUrl <orthancServerUrl>]
+    URL of the orthanc server.
+        
+    [-u|--username <orthancUserName>]
+    The username to login to the orthanc server.
+        
+    [-p|--password <orthancPassword>]
+    Specify the password to login to the orthanc server. 
+        
+    [-m|--remoteModality <remoteModality>]
+    The target remote modality to which orthanc will send dicoms      
 
     [-h] [--help]
     If specified, show help message and exit.

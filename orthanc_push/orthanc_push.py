@@ -38,6 +38,7 @@ Gstr_synopsis = """
             [-o|--orthancUrl <orthancServerUrl>]                        \\
             [-u|--username <orthancUserName>]                           \\
             [-p|--password <orthancPassword>]                           \\
+            [-m|--remoteModality <remoteModality>]                      \\
             [-h] [--help]                                               \\
             [--json]                                                    \\
             [--man]                                                     \\
@@ -74,7 +75,10 @@ Gstr_synopsis = """
         The username to login to the orthanc server.
         
         [-p|--password <orthancPassword>]
-        Specify the password to login to the orthanc server.        
+        Specify the password to login to the orthanc server. 
+        
+        [-m|--remoteModality <remoteModality>]
+        The target remote modality to which orthanc will send dicoms      
 
         [-h] [--help]
         If specified, show help message and exit.

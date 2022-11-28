@@ -6,7 +6,7 @@ with open(path.join(path.dirname(path.abspath(__file__)), 'README.rst')) as f:
 
 setup(
     name             = 'orthanc_push',
-    version          = '0.1.3',
+    version          = '1.0.0',
     description      = 'An app to push/upload dicoms to an orthanc server',
     long_description = readme,
     author           = 'FNNDSC',
