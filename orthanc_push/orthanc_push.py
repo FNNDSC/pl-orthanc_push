@@ -12,6 +12,8 @@ from chrisapp.base import ChrisApp
 import os
 import glob
 from pyorthanc import Orthanc, RemoteModality
+import logging
+import sys
 
 Gstr_title = r"""
             _   _                                          _     
@@ -188,7 +190,26 @@ class Orthanc_push(ChrisApp):
         for k,v in d_options.items():
             print("%20s: %-40s" % (k, v))
         print("")
+        
+        # Create a logger object
+        logger = logging.getLogger()
+            
+        # set level 
+        logger.setLevel(logging.INFO)
+        
+        # add handler
+        logger.addHandler(logging.StreamHandler(stream=sys.stdout))
+        
+        # lets create a log file in the o/p directory first
+        log_file = os.path.join(options.outputdir,'progress.log')
 
+        lf = open(log_file,"w")
+        
+        # now create and configure logger
+        file_handler = logging.FileHandler(log_file)
+        
+        # add handler
+        logger.addHandler(file_handler)
         
         orthanc = Orthanc(options.orthancUrl,username=options.username,password=options.password)
         dcm_str_glob = '%s/%s' % (options.inputdir,options.inputFileFilter)
@@ -197,13 +218,26 @@ class Orthanc_push(ChrisApp):
         modality = RemoteModality(orthanc,options.remoteModality) 
 
         for dcm_datapath in l_dcm_datapath:
-            print(f"Pushing dicom: {dcm_datapath} to orthanc \n")
+            logger.info(f"Pushing dicom: {dcm_datapath} to orthanc \n")
             with open(dcm_datapath, 'rb') as file:
-                data = orthanc.post_instances(file.read())
-                resource_id = data['ID']
-                print(f'Pushing resource {resource_id} to {options.remoteModality} \n')
-                response = modality.store( {'Resources':[resource_id]})
-                print(f'Response : {response}')
+            
+                try:
+                    data = orthanc.post_instances(file.read())
+                    resource_id = data['ID']
+                    logger.info(f'Pushing resource {resource_id} to {options.remoteModality} \n')
+                except:
+                    logger.info(f'Connection error \n')
+                    
+                try:
+                    response = modality.store( {'Resources':[resource_id]})
+                    logger.info(f'Response : {response}')
+                except:
+                    logger.info(f'No {options.remoteModality} found\n')
+                
+        # Close logging
+        logger.removeHandler(file_handler)
+        file_handler.close()
+        lf.close()
         
        
 
