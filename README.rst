@@ -39,7 +39,7 @@ Usage
         [-o|--orthancUrl <orthancServerUrl>]                       
         [-u|--username <orthancUserName>]                          
         [-p|--password <orthancPassword>]                         
-        [-m|--remoteModality <remoteModality>]                     
+        [-r|--pushToRemote <remoteModality>]                     
         [-h|--help]
         [--json] [--man] [--meta]
         [--savejson <DIR>]
@@ -66,7 +66,7 @@ Arguments
     [-p|--password <orthancPassword>]
     Specify the password to login to the orthanc server. 
         
-    [-m|--remoteModality <remoteModality>]
+    [-r|--pushToRemote <remoteModality>]
     The target remote modality to which orthanc will send dicoms      
 
     [-h] [--help]

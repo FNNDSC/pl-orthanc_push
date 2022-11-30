@@ -40,7 +40,7 @@ Gstr_synopsis = """
             [-o|--orthancUrl <orthancServerUrl>]                        \\
             [-u|--username <orthancUserName>]                           \\
             [-p|--password <orthancPassword>]                           \\
-            [-m|--remoteModality <remoteModality>]                      \\
+            [-r|--pushToRemote <remoteModality>]                        \\
             [-h] [--help]                                               \\
             [--json]                                                    \\
             [--man]                                                     \\
@@ -79,7 +79,7 @@ Gstr_synopsis = """
         [-p|--password <orthancPassword>]
         Specify the password to login to the orthanc server. 
         
-        [-m|--remoteModality <remoteModality>]
+        [-r|--pushToRemote <remoteModality>]
         The target remote modality to which orthanc will send dicoms      
 
         [-h] [--help]
@@ -168,12 +168,12 @@ class Orthanc_push(ChrisApp):
                             help         = 'Orthanc server url',
                             default      = 'orthanc')
                             
-        self.add_argument(  '--remoteModality','-m',
-                            dest         = 'remoteModality',
+        self.add_argument(  '--pushToRemote','-r',
+                            dest         = 'pushToRemote',
                             type         = str,
                             optional     = True,
                             help         = 'Remote modality',
-                            default      = 'CHRISLOCAL')
+                            default      = '')
                             
 
 
@@ -215,24 +215,27 @@ class Orthanc_push(ChrisApp):
         dcm_str_glob = '%s/%s' % (options.inputdir,options.inputFileFilter)
         l_dcm_datapath = glob.glob(dcm_str_glob, recursive=True)
         
-        modality = RemoteModality(orthanc,options.remoteModality) 
-
+        modality = RemoteModality(orthanc,options.pushToRemote) 
+        
+        data={}
         for dcm_datapath in l_dcm_datapath:
             logger.info(f"Pushing dicom: {dcm_datapath} to orthanc \n")
             with open(dcm_datapath, 'rb') as file:
             
                 try:
-                    data = orthanc.post_instances(file.read())
-                    resource_id = data['ID']
-                    logger.info(f'Pushing resource {resource_id} to {options.remoteModality} \n')
-                except:
-                    logger.info(f'Connection error \n')
+                    data = orthanc.post_instances(file.read())                
+                except Exception as err:
+                    logger.info(f'{err} \n')
                     
-                try:
-                    response = modality.store( {'Resources':[resource_id]})
-                    logger.info(f'Response : {response}')
-                except:
-                    logger.info(f'No {options.remoteModality} found\n')
+                if len(options.pushToRemote)>0:
+                    resource_id = data['ID'] 
+                    logger.info(f'Pushing resource {resource_id} to {options.pushToRemote} \n')
+                    
+                    try:                   
+                        response = modality.store( {'Resources':[resource_id]})
+                        logger.info(f'Response : {response}\n')
+                    except Exception as err:
+                        logger.info(f'{err} \n')
                 
         # Close logging
         logger.removeHandler(file_handler)
