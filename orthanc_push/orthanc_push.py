@@ -80,7 +80,7 @@ Gstr_synopsis = """
         Specify the password to login to the orthanc server. 
         
         [-r|--pushToRemote <remoteModality>]
-        The target remote modality to which orthanc will send dicoms      
+        If specified, orthanc will send dicoms to the target remote modality  
 
         [-h] [--help]
         If specified, show help message and exit.

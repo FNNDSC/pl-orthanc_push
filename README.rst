@@ -25,8 +25,8 @@ Description
 -----------
 
 
-``orthanc_push`` is a *ChRIS ds-type* application that takes in ... as ... files
-and produces ...
+``orthanc_push`` is a *ChRIS ds-type* application that takes in DICOMs as input files
+and pushes them to a remote Orthanc server and to an optional remote modality
 
 
 Usage
@@ -67,7 +67,7 @@ Arguments
     Specify the password to login to the orthanc server. 
         
     [-r|--pushToRemote <remoteModality>]
-    The target remote modality to which orthanc will send dicoms      
+    If specified, orthanc will send dicoms to the target remote modality       
 
     [-h] [--help]
     If specified, show help message and exit.
