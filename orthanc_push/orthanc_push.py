@@ -230,9 +230,9 @@ class Orthanc_push(ChrisApp):
         log_file = os.path.join(options.outputdir,'progress.log')
         lf = open(log_file,"w")
         # now create and configure logger
-        file_handler = logging.FileHandler(log_file)
+        # file_handler = logging.FileHandler(log_file)
         # add handler
-        logger.addHandler(file_handler)
+        logger.add(log_file)
 
         orthanc = Orthanc(options.orthancUrl,username=options.username,password=options.password)
         dcm_str_glob = '%s/%s' % (options.inputdir,options.inputFileFilter)
