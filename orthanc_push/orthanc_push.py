@@ -218,7 +218,7 @@ class Orthanc_push(ChrisApp):
         self.preamble_show(options)
 
         # lets create a log file in the o/p directory first
-        log_file = os.path.join(options.outputdir,'progress.log')
+        log_file = os.path.join(options.outputdir, 'terminal.log')
         logger.add(log_file)
 
         orthanc = Orthanc(options.orthancUrl,username=options.username,password=options.password)
@@ -229,7 +229,7 @@ class Orthanc_push(ChrisApp):
 
         data={}
         for dcm_datapath in l_dcm_datapath:
-            LOG(f"Pushing dicom: {dcm_datapath} to orthanc \n")
+            LOG(f"Pushing dicom: {dcm_datapath} to orthanc")
             with open(dcm_datapath, 'rb') as file:
 
                 try:
