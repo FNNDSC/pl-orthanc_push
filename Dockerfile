@@ -32,4 +32,4 @@ RUN pip install -r requirements.txt
 COPY . .
 RUN pip install .
 
-CMD ["orthanc_push", "--help"]
+CMD ["orthanc_push", "--man"]

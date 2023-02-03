@@ -271,10 +271,8 @@ class Orthanc_push(ChrisApp):
         et: float = time.time()
         LOG("Execution time: %f seconds." % (et -st))
 
-
-
     def show_man_page(self):
         """
         Print the app's man page.
         """
-        print(Gstr_synopsis)
+        LOG(Gstr_synopsis)
