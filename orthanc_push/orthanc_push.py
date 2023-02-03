@@ -217,21 +217,8 @@ class Orthanc_push(ChrisApp):
         st: float = time.time()
         self.preamble_show(options)
 
-        # # Create a logger object
-        # logger = logging.getLogger()
-
-        # # set level
-        # logger.setLevel(logging.INFO)
-
-        # # add handler
-        # logger.addHandler(logging.StreamHandler(stream=sys.stdout))
-
         # lets create a log file in the o/p directory first
         log_file = os.path.join(options.outputdir,'progress.log')
-        lf = open(log_file,"w")
-        # now create and configure logger
-        # file_handler = logging.FileHandler(log_file)
-        # add handler
         logger.add(log_file)
 
         orthanc = Orthanc(options.orthancUrl,username=options.username,password=options.password)
@@ -260,14 +247,6 @@ class Orthanc_push(ChrisApp):
                     except Exception as err:
                         LOG(f'{err} \n')
 
-        # # Close logging
-        # logger.removeHandler(file_handler)
-        # file_handler.close()
-        # lf.close()
-
-        LOG("Saving %s" % jsonFilePath)
-        with open(jsonFilePath, 'w', encoding='utf-8') as jsonf:
-            jsonf.write(json.dumps(d_json, indent=4))
         et: float = time.time()
         LOG("Execution time: %f seconds." % (et -st))
 
