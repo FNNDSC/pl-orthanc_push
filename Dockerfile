@@ -20,8 +20,7 @@
 #
 #   docker run -ti -e HOST_IP=$(ip route | grep -v docker | awk '{if(NF==11) print $9}') --entrypoint /bin/bash local/pl-orthanc_push
 #
-
-FROM python:3.9.1-slim-buster
+FROM docker.io/python:3.11.0-slim-bullseye
 LABEL maintainer="FNNDSC <dev@babyMRI.org>"
 
 WORKDIR /usr/local/src
