@@ -11,7 +11,8 @@
 from chrisapp.base import ChrisApp
 import os
 import glob
-from pyorthanc import Orthanc, RemoteModality
+# from pyorthanc import Orthanc, RemoteModality
+from orthanc_api_client import OrthancApiClient
 import logging
 import sys
 import  time
@@ -258,29 +259,32 @@ class Orthanc_push(ChrisApp):
         log_file = os.path.join(options.outputdir, 'terminal.log')
         logger.add(log_file)
 
-        orthanc = Orthanc(options.orthancUrl,username=options.username,password=options.password)
+        # orthanc = Orthanc(options.orthancUrl,username=options.username,password=options.password)
+        orthanc = OrthancApiClient(options.orthancUrl,user=options.username,pwd=options.password)
         dcm_str_glob = '%s/%s' % (options.inputdir,options.inputFileFilter)
         l_dcm_datapath = glob.glob(dcm_str_glob, recursive=True)
 
-        modality = RemoteModality(orthanc,options.pushToRemote)
+        # modality = RemoteModality(orthanc,options.pushToRemote)
 
         data={}
+        instances_ids=[]
         for dcm_datapath in l_dcm_datapath:
             LOG(f"Pushing dicom: {dcm_datapath} to orthanc")
             with open(dcm_datapath, 'rb') as file:
 
                 try:
-                    data = orthanc.post_instances(file.read())
+                    # data = orthanc.post_instances(file.read())
+                    instances_ids = orthanc.upload(file.read())
                 except Exception as err:
                     LOG(f'{err} \n')
 
                 if len(options.pushToRemote)>0:
-                    resource_id = data['ID']
-                    LOG(f'Pushing resource {resource_id} to {options.pushToRemote} \n')
-
+                    # resource_id = data['ID']
+                    LOG(f'Pushing resource {instances_ids} to {options.pushToRemote} \n')
                     try:
-                        response = modality.store( {'Resources':[resource_id]})
-                        LOG(f'Response : {response}\n')
+                        # response = modality.store( {'Resources':[resource_id]})
+                        response = orthanc.modalities.send(options.pushToRemote,resources_ids=instances_ids)
+                        LOG('Response : {Success}\n')
                     except Exception as err:
                         LOG(f'{err} \n')
 
