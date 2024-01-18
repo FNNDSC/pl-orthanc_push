@@ -219,12 +219,18 @@ class Orthanc_push(ChrisApp):
                             optional     = True,
                             help         = 'Remote modality',
                             default      = '')
+        self.add_argument('--timeout', '-t',
+                          dest           = 'timeout',
+                          type           = int,
+                          optional       = True,
+                          help           = 'Number of seconds to wait for response while sending to remote PACS',
+                          default        = 1000)
         self.add_argument(  '--pftelDB',
-                            dest        = 'pftelDB',
-                            default     = '',
-                            type        = str,
-                            optional    = True,
-                            help        = 'optional pftel server DB path'
+                            dest         = 'pftelDB',
+                            default      = '',
+                            type         = str,
+                            optional     = True,
+                            help         = 'optional pftel server DB path'
                         )
 
     def preamble_show(self, options) -> None:
@@ -283,7 +289,7 @@ class Orthanc_push(ChrisApp):
                     LOG(f'Pushing resource {instances_ids} to {options.pushToRemote} \n')
                     try:
                         # response = modality.store( {'Resources':[resource_id]})
-                        response = orthanc.modalities.send(options.pushToRemote,resources_ids=instances_ids)
+                        response = orthanc.modalities.send(options.pushToRemote,resources_ids=instances_ids, timeout=options.timeout)
                         LOG('Response : {Success}\n')
                     except Exception as err:
                         LOG(f'{err} \n')
