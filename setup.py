@@ -6,12 +6,12 @@ with open(path.join(path.dirname(path.abspath(__file__)), 'README.rst')) as f:
 
 setup(
     name             = 'orthanc_push',
-    version          = '1.2.5',
+    version          = '1.2.6',
     description      = 'An app to push/upload dicoms to an orthanc server',
     long_description = readme,
     author           = 'FNNDSC',
     author_email     = 'dev@babyMRI.org',
-    url              = 'http://wiki',
+    url              = 'https://github.com/FNNDSC/pl-orthanc_push#readme',
     packages         = ['orthanc_push'],
     install_requires = ['chrisapp'],
     test_suite       = 'nose.collector',
