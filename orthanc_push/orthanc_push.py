@@ -270,29 +270,22 @@ class Orthanc_push(ChrisApp):
         dcm_str_glob = '%s/%s' % (options.inputdir,options.inputFileFilter)
         l_dcm_datapath = glob.glob(dcm_str_glob, recursive=True)
 
-        # modality = RemoteModality(orthanc,options.pushToRemote)
-
-        data={}
         instances_ids=[]
         for dcm_datapath in l_dcm_datapath:
             LOG(f"Pushing dicom: {dcm_datapath} to orthanc")
-            with open(dcm_datapath, 'rb') as file:
+            try:
+                instances_ids += orthanc.upload_file(dcm_datapath)
+                # instances_ids += instances_id
+            except Exception as err:
+                LOG(f'{err} \n')
 
-                try:
-                    # data = orthanc.post_instances(file.read())
-                    instances_ids = orthanc.upload(file.read())
-                except Exception as err:
-                    LOG(f'{err} \n')
-
-                if len(options.pushToRemote)>0:
-                    # resource_id = data['ID']
-                    LOG(f'Pushing resource {instances_ids} to {options.pushToRemote} \n')
-                    try:
-                        # response = modality.store( {'Resources':[resource_id]})
-                        response = orthanc.modalities.send(options.pushToRemote,resources_ids=instances_ids, timeout=options.timeout)
-                        LOG('Response : {Success}\n')
-                    except Exception as err:
-                        LOG(f'{err} \n')
+        if len(options.pushToRemote)>0:
+            LOG(f'Pushing resources to {options.pushToRemote} \n')
+            try:
+                response = orthanc.modalities.send(options.pushToRemote,resources_ids=instances_ids, timeout=options.timeout)
+                LOG('Response : {Success}\n')
+            except Exception as err:
+                LOG(f'{err} \n')
 
     def show_man_page(self):
         """
