@@ -11,7 +11,7 @@
 from chrisapp.base import ChrisApp
 import os
 import glob
-# from pyorthanc import Orthanc, RemoteModality
+from pyorthanc import Orthanc, RemoteModality
 from orthanc_api_client import OrthancApiClient
 import logging
 import sys
@@ -162,7 +162,7 @@ class Orthanc_push(ChrisApp):
     MIN_NUMBER_OF_WORKERS   = 1    # Override with the minimum number of workers as int
     MAX_NUMBER_OF_WORKERS   = 1    # Override with the maximum number of workers as int
     MIN_CPU_LIMIT           = 2000 # Override with millicore value as int (1000 millicores == 1 CPU core)
-    MIN_MEMORY_LIMIT        = 8000  # Override with memory MegaByte (MB) limit as int
+    MIN_MEMORY_LIMIT        = 2000  # Override with memory MegaByte (MB) limit as int
     MIN_GPU_LIMIT           = 0    # Override with the minimum number of GPUs as int
     MAX_GPU_LIMIT           = 0    # Override with the maximum number of GPUs as int
 
@@ -265,8 +265,11 @@ class Orthanc_push(ChrisApp):
         log_file = os.path.join(options.outputdir, 'terminal.log')
         logger.add(log_file)
 
-        # orthanc = Orthanc(options.orthancUrl,username=options.username,password=options.password)
+        # orthanc = Orthanc(options.orthancUrl)# ,username=options.username,password=options.password)
         orthanc = OrthancApiClient(options.orthancUrl,user=options.username,pwd=options.password)
+
+
+
         dcm_str_glob = '%s/%s' % (options.inputdir,options.inputFileFilter)
         l_dcm_datapath = glob.glob(dcm_str_glob, recursive=True)
 
@@ -280,7 +283,7 @@ class Orthanc_push(ChrisApp):
                 LOG(f'{err} \n')
 
         if len(options.pushToRemote)>0:
-            LOG(f'Pushing resources to {options.pushToRemote} \n')
+            LOG(f'Pushing {len(instances_ids)} resources to {options.pushToRemote} \n')
             try:
                 response = orthanc.modalities.send(options.pushToRemote,resources_ids=instances_ids, timeout=options.timeout)
                 LOG('Response : {Success}\n')
