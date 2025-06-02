@@ -74,14 +74,6 @@ jobs:
       - uses: docker/setup-buildx-action@v1
         with:
           driver-opts: network=host
-      # save some time during rebuilds
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
 
       - name: Login to DockerHub
         id: dockerhub_login
